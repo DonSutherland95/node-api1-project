@@ -47,7 +47,35 @@ app.post('/api/users', (req, res)=>{
     }
 })
 
+app.put('/api/users/:id', (req, res)=>{
+    const {id} = req.params
+    const {name, bio} = req.body
 
+    const indexOfUser = users.findIndex(user=> user.id === id)
+    if(indexOfUser !== -1 ){
+        users[indexOfUser] = {id , name, bio}
+        res.status(200).json({id, name, bio})
+    } else {
+        res.status(404).json({message: `No user with id ${id}`})
+    }
+})
+
+app.delete('/api/users/:id', (req, res)=>{
+    const {id} = req.params
+    try{
+        if(!users.find(user=> user.id === id)){
+            res.status(404).json({message: 'not found'})
+        } else {
+            users = users.filter(user=> user.id !== id)
+            res.status(200).json({message: `user with id ${id} deleted` })
+        }
+        
+    } catch(error){
+        res.status(500).json({message: 'something went wrong'})
+    }
+    
+
+})
 // catch-all endpoint
 app.use('*', (req, res)=>{
  // req represents the request from the client
