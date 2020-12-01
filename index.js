@@ -31,7 +31,21 @@ app.get('/api/users/:id', (req, res)=>{
     }
 })
 
+app.post('/api/users', (req, res)=>{
+    const {name, bio} = req.body
 
+    if(!name || !bio){
+        res.status(400).json({errorMessage: "Please provide name and bio for the user."})
+    } else {
+        const newUser = {
+            id: shortid.generate(),
+            name,
+            bio
+        }
+        users.push(newUser)
+        res.status(201).json(newUser)
+    }
+})
 
 
 // catch-all endpoint
